@@ -1,27 +1,33 @@
-import math
-
-
 def interpolation_search(arr, target):
-    low = 0
-    high = len(arr) - 1
-    while low <= high and target >= arr[low] and target <= arr[high]:
+    if not arr:
+        return -1
+
+    low, high = 0, len(arr) - 1
+
+    if target < arr[low] or target > arr[high]:
+        return -1
+
+    while low <= high and arr[low] <= target <= arr[high]:
         if low == high:
-            if arr[low] == target:
-                return low
-            else:
-                return -1
-        # Interpolation formula to estimate probe position
-        pos = low + ((target - arr[low]) * (high - low)) / (
-            arr[high] - arr[low]
-        )
-        pos = math.floor(pos)
+            return low if arr[low] == target else -1
+
+        if arr[high] == arr[low]:
+            return low if arr[low] == target else -1
+
+        pos = low + int(((target - arr[low]) * (high - low)) / (arr[high] - arr[low]))
+
+        if pos < low or pos > high:
+            pos = (low + high) // 2
+
         if arr[pos] == target:
             return pos
         elif arr[pos] < target:
             low = pos + 1
         else:
             high = pos - 1
+
     return -1
+
 
 arr = [10, 20, 30, 40, 50, 60, 70, 80, 90]
 target = 70
